@@ -1,0 +1,26 @@
+Customers and average balance by job:
+SELECT job, COUNT(*) AS customers, ROUND(AVG(balance), 0) AS avg_balance
+FROM bank_customer_full_table_processed
+GROUP BY job
+ORDER BY avg_balance DESC;
+
+Loan and housing loan rates by education level:
+SELECT education,
+  COUNT(*) AS customers,
+  ROUND(100.0 * SUM(CASE WHEN loan = 'yes' THEN 1 ELSE 0 END) / COUNT(*), 1) AS pct_personal_loan,
+  ROUND(100.0 * SUM(CASE WHEN housing = 'yes' THEN 1 ELSE 0 END) / COUNT(*), 1) AS pct_housing_loan
+FROM bank_customer_full_table_processed
+GROUP BY education
+ORDER BY customers DESC;
+
+Customers and average balance by age group:
+SELECT
+  CASE WHEN age < 30 THEN 'under 30'
+       WHEN age < 45 THEN '30-44'
+       WHEN age < 60 THEN '45-59'
+       ELSE '60+' END AS age_group,
+  COUNT(*) AS customers,
+  ROUND(AVG(balance), 0) AS avg_balance
+FROM bank_customer_full_table_processed
+GROUP BY 1
+ORDER BY 1;

@@ -1,0 +1,20 @@
+CREATE TABLE bank_customer_full_table_processed
+WITH (
+  format = 'PARQUET',
+  parquet_compression = 'SNAPPY',
+  external_location = 's3://banking-processed-data-sec/processed/'
+) AS
+SELECT
+  CAST(age AS integer) AS age,
+  job,
+  marital,
+  education,
+  "default" AS credit_default,
+  CAST(balance AS integer) AS balance,
+  housing,
+  loan
+FROM bank_customer_full_table
+WHERE education <> 'unknown'
+  AND job <> 'unknown'
+  AND age IS NOT NULL
+  AND balance IS NOT NULL
